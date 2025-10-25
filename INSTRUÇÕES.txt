@@ -1,0 +1,226 @@
+================================================================================
+  INSTRUÇÕES PARA EXECUTAR O PROJETO UIx SSR HYBRID
+================================================================================
+
+Este guia passo a passo vai te ajudar a rodar o projeto pela primeira vez.
+
+================================================================================
+PASSO 1: VERIFICAR PRÉ-REQUISITOS
+================================================================================
+
+Antes de começar, verifique se você tem instalado:
+
+1. Java 11 ou superior
+   Verificar: java -version
+
+2. Clojure CLI (tools.deps)
+   Verificar: clj --version
+
+3. Node.js 16 ou superior e npm
+   Verificar: node --version
+   Verificar: npm --version
+
+Se algum desses não estiver instalado, veja o README.md seção "Pré-requisitos"
+para instruções de instalação.
+
+================================================================================
+PASSO 2: INSTALAR DEPENDÊNCIAS
+================================================================================
+
+No diretório raiz do projeto (uix-ssr-hybrid/), execute:
+
+  npm install
+
+Isso vai instalar:
+- Shadow-CLJS (compilador ClojureScript)
+- React e React-DOM
+
+Aguarde o download e instalação de todas as dependências.
+As dependências Clojure serão baixadas automaticamente quando você rodar
+o servidor pela primeira vez.
+
+================================================================================
+PASSO 3: INICIAR O PROJETO
+================================================================================
+
+OPÇÃO A: UM ÚNICO COMANDO (RECOMENDADO - MAIS FÁCIL) ⚡
+------------------------------------------------------
+
+Execute um único comando que inicia tudo:
+
+  npm run dev ou clj -M:dev-parallel
+
+Isso vai iniciar AUTOMATICAMENTE:
+- ✅ Servidor Clojure (porta 3000)
+- ✅ Shadow-CLJS (compilador frontend)
+- ✅ Ambos rodam em paralelo no mesmo terminal
+
+Você verá os logs de ambos os processos misturados no terminal.
+
+IMPORTANTE: Na primeira execução, pode levar 1-2 minutos para baixar
+dependências e compilar tudo. Aguarde até ver:
+
+  🚀 Servidor iniciando na porta 3000...
+  [:app] Build completed.
+
+Pronto! Pule para o PASSO 4 (Acessar a Aplicação).
+
+
+OPÇÃO B: DOIS TERMINAIS SEPARADOS (LOGS MAIS ORGANIZADOS)
+----------------------------------------------------------
+
+Se preferir ver os logs separadamente, use dois terminais:
+
+Terminal 1 - Servidor Clojure:
+
+  npm run server
+  (ou: clj -M -m myapp.server)
+
+  Você verá:
+    Downloading dependencies...
+    🚀 Servidor iniciando na porta 3000...
+    📍 Acesse http://localhost:3000
+
+  IMPORTANTE: Na primeira execução, o Clojure vai baixar todas as
+  dependências (Ring, Hiccup, Compojure, etc). Isso pode levar alguns minutos.
+
+  Mantenha este terminal aberto.
+
+Terminal 2 - Shadow-CLJS:
+
+  npm run watch
+
+  Você verá:
+    shadow-cljs - watching build :app
+    [:app] Compiling ...
+    [:app] Build completed. (XXX files, XX compiled, XX seconds)
+
+  IMPORTANTE: Na primeira execução, o Shadow-CLJS vai baixar dependências
+  ClojureScript e compilar todo o código. Isso pode levar 1-2 minutos.
+
+  Mantenha este terminal aberto.
+
+================================================================================
+PASSO 4: ACESSAR A APLICAÇÃO
+================================================================================
+
+Abra seu navegador e acesse:
+
+  http://localhost:3000
+
+Você deve ver a página inicial do UIx SSR Hybrid com:
+- Hero section com título e botões
+- Estatísticas (Posts, Visitantes, Uptime)
+- Grid com 2 posts em destaque
+
+================================================================================
+PASSO 5: TESTAR AS FUNCIONALIDADES
+================================================================================
+
+1. NAVEGAÇÃO
+   - Clique em "Sobre" no menu → deve ir para página /about
+   - Clique em "Blog" no menu → deve ir para um post
+   - Clique no logo "UIx SSR" → deve voltar para home
+
+2. PÁGINA DE POST
+   - Clique em um dos posts da home
+   - Teste o botão de curtidas (❤️) → contador deve aumentar/diminuir
+   - Clique em "Compartilhar" → popup deve aparecer com opções
+   - Teste os botões de compartilhamento (abrirão redes sociais)
+
+3. HOT RELOAD (Opcional)
+   - Com npm run dev rodando, edite src/myapp/client.cljs
+   - Exemplo: Mude o texto "UIx SSR Hybrid" para "Meu App"
+   - Salve o arquivo
+   - O navegador deve recarregar automaticamente com a mudança
+
+================================================================================
+PASSO 6: TESTAR O SEO (Opcional)
+================================================================================
+
+Para verificar que o servidor está gerando HTML com metadados completos,
+abra um terceiro terminal e execute:
+
+  curl http://localhost:3000/
+
+Você verá HTML completo com:
+- Tags <meta> no <head>
+- Open Graph tags (og:title, og:description, etc)
+- Twitter Card tags
+- JSON-LD structured data
+- Dados da página injetados como JSON
+
+Isso prova que o SSR está funcionando perfeitamente!
+
+================================================================================
+ROTAS DISPONÍVEIS
+================================================================================
+
+URL                                 | Descrição
+------------------------------------|------------------------------------------
+http://localhost:3000/              | Página inicial
+http://localhost:3000/about         | Página sobre o projeto
+http://localhost:3000/blog/entendendo-ssr-clojure | Post sobre SSR
+http://localhost:3000/blog/introducao-uix         | Post sobre UIx
+http://localhost:3000/qualquer-coisa              | Página 404
+
+================================================================================
+PARAR A APLICAÇÃO
+================================================================================
+
+Para parar a aplicação:
+
+1. No Terminal 1 (servidor Clojure): Pressione Ctrl+C
+2. No Terminal 2 (Shadow-CLJS): Pressione Ctrl+C
+
+================================================================================
+PROBLEMAS COMUNS
+================================================================================
+
+PROBLEMA: "Porta 3000 já está em uso"
+SOLUÇÃO: Outro processo está usando a porta. Encerre-o ou mude a porta
+         em src/myapp/server.clj (função -main).
+
+PROBLEMA: "Cannot find module 'react'"
+SOLUÇÃO: Execute novamente: npm install
+
+PROBLEMA: "Could not find artifact"
+SOLUÇÃO: Verifique sua conexão com internet. As dependências precisam
+         ser baixadas do Maven Central e Clojars.
+
+PROBLEMA: Mudanças no código não aparecem
+SOLUÇÃO: - Para .cljs: Verifique se npm run watch está rodando
+         - Para .clj: Reinicie o servidor (Ctrl+C e rode novamente)
+
+PROBLEMA: Página não carrega CSS ou JavaScript
+SOLUÇÃO: Verifique se o Shadow-CLJS compilou com sucesso
+         (deve ter criado resources/public/js/main.js)
+
+================================================================================
+PRÓXIMOS PASSOS
+================================================================================
+
+Agora que o projeto está rodando, você pode:
+
+1. Explorar o código:
+   - src/myapp/server.clj - Lógica do servidor e SSR
+   - src/myapp/client.cljs - Componentes UIx
+   - resources/public/css/main.css - Estilos
+
+2. Fazer modificações:
+   - Adicionar novos posts em server.clj
+   - Criar novos componentes em client.cljs
+   - Ajustar cores e estilos em main.css
+
+3. Ler o README.md completo para:
+   - Entender a arquitetura
+   - Ver como adicionar novas rotas
+   - Aprender sobre build de produção
+
+================================================================================
+
+Feito! Seu projeto UIx SSR Hybrid está rodando! 🎉
+
+Para mais informações, consulte o README.md
+
+================================================================================
