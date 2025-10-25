@@ -77,9 +77,9 @@
 ;; -----------------------------------------------------------------------------
 
 (defui home-page
-  [{:keys [hero feature-cards quick-links]}]
+  [{:keys [hero-data feature-cards quick-links]}]
   ($ :<>
-     ($ hero hero)
+     ($ hero hero-data)
      ($ :section#componentes.section
         ($ :div.container
            ($ :h2.section-title "Blocos prontos para editar")

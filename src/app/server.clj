@@ -47,17 +47,13 @@
         [:head]
         (concat
          (render-meta-tags metadata)
-         [[:link {:rel "stylesheet"
-                  :href "/css/main.css"
-                  :media "print"
-                  :onload "this.media='all'"}]]))
+         [[:link {:rel "stylesheet" :href "css/main.css" :media "print" :onload "this.media='all'"}]]))
        [:body
         [:span {:class "sr-only"} "rendered on server"]
         [:div#app]
         [:script {:id "page-data" :type "application/json"}
-         (-> (json/generate-string page-data {:pretty true})
-             h/raw)]
-        [:script {:src "/js/main.js" :defer true}]])
+         (-> (json/generate-string page-data {:pretty true}) h/raw)]
+        [:script {:src "js/main.js" :defer true}]])
       str))
 
 ;; ----------------------------------------------------------------------------- 
