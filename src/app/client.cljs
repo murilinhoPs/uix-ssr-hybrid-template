@@ -125,11 +125,12 @@
 ;; -----------------------------------------------------------------------------
 
 (defui app []
-  (let [page-data (read-page-data)]
+  (let [page-data (read-page-data)
+        page-type (-> page-data :page keyword)]
     ($ :div.app
        ($ header)
        ($ :main
-          (case (:page page-data)
+          (case page-type
             :home ($ home-page page-data)
             :about ($ about-page page-data)
             ($ not-found-page)))
