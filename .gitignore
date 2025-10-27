@@ -25,8 +25,8 @@ profiles.clj
 .vscode
 .lsp/*
 .clj-kondo/*
+.clj-kondo/
 /.clj-kondo/
-clj-kondo/
 .calva/*
 /.shadow-cljs/
 node_modules/
