@@ -1,4 +1,4 @@
-(ns app.server
+(ns app.server.init
   "Servidor Ring/Jetty com SSR básico pronto para hidratação UIx."
   (:require [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.params :refer [wrap-params]]
@@ -131,5 +131,5 @@
 (defn -main
   [& _args]
   (let [port (Integer/parseInt (or (System/getenv "PORT") "3000"))]
-    (println (format "Servidor disponível em http://localhost:%s" port))
+    (println (format "🚀 Servidor disponível em http://localhost:%s" port))
     (run-jetty app {:port port :join? true})))
