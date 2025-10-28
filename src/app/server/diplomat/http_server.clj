@@ -1,7 +1,7 @@
 (ns app.server.diplomat.http-server
   (:require
    [app.server.config :as config]
-   [app.server.diplomat.widgets :as widgets]
+   [app.server.diplomat.screens :as screens]
    [app.server.helpers.render :refer [render-shell]]
    [app.server.logic.page-metadata :refer [build-page-metadata]]
    [cheshire.core :as json]
@@ -10,7 +10,7 @@
 
 (defroutes app-routes
   (routes
-   widgets/widgets
+   screens/screens
    (GET "/api" [] (json/encode {:status 200 :body (str "API version: " config/api-version)}))
    (route/resources "/")
    (route/not-found
