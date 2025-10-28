@@ -1,12 +1,13 @@
 (ns app.server.core
-  "Servidor Ring/Jetty com SSR básico pronto para hidratação UIx."
-  (:require [ring.adapter.jetty :refer [run-jetty]]
-            [ring.middleware.params :refer [wrap-params]]
-            [ring.middleware.reload :refer [wrap-reload]]
-            [compojure.core :refer [GET defroutes]]
-            [compojure.route :as route]
-            [hiccup2.core :as h]
-            [cheshire.core :as json]))
+  "Servidor Ring/Http-kit com SSR básico pronto para hidratação UIx."
+  (:require
+   [cheshire.core :as json]
+   [compojure.core :refer [defroutes GET]]
+   [compojure.route :as route]
+   [hiccup2.core :as h]
+   [org.httpkit.server :refer [run-server]]
+   [ring.middleware.params :refer [wrap-params]]
+   [ring.middleware.reload :refer [wrap-reload]]))
 
 ;; ----------------------------------------------------------------------------- 
 ;; Dados simples que podem ser trocados posteriormente
@@ -110,6 +111,7 @@
 (defroutes app-routes
   (GET "/" [] home-handler)
   (GET "/about" [] about-handler)
+  (GET "/json" [] (json/encode {:status "ok" :message "teste"}))
   (route/resources "/")
   (route/not-found
    (fn [_]
@@ -119,10 +121,19 @@
              (build-page-metadata {:title "404 - Página não encontrada" :url "/404"})
              {:page :not-found})})))
 
+(defn- wrap-request-logging [handler]
+  (fn [{:keys [request-method uri] :as req}]
+    (let [resp (handler req)]
+      (println (name request-method) (:status resp)
+            (if-let [qs (:query-string req)]
+              (str uri "?" qs) uri))
+      resp)))
+
 (def app
   (-> app-routes
       wrap-params
-      wrap-reload))
+      wrap-reload
+      wrap-request-logging))
 
 ;; ----------------------------------------------------------------------------- 
 ;; Entry point
@@ -132,4 +143,4 @@
   [& _args]
   (let [port (Integer/parseInt (or (System/getenv "PORT") "3000"))]
     (println (format "🚀 Servidor disponível em http://localhost:%s" port))
-    (run-jetty app {:port port :join? true})))
+    (run-server app {:port port})))
