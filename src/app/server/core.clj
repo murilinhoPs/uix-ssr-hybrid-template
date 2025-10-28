@@ -12,6 +12,7 @@
 ;; ----------------------------------------------------------------------------- 
 ;; Dados simples que podem ser trocados posteriormente
 ;; -----------------------------------------------------------------------------
+(def api-version "v1")
 
 (def site-info
   {:name "UIx SSR Template"
@@ -111,7 +112,7 @@
 (defroutes app-routes
   (GET "/" [] home-handler)
   (GET "/about" [] about-handler)
-  (GET "/json" [] (json/encode {:status "ok" :message "teste"}))
+  (GET "/api" [] (json/encode {:status 200 :body (str "API version: " api-version)}))
   (route/resources "/")
   (route/not-found
    (fn [_]
@@ -125,8 +126,8 @@
   (fn [{:keys [request-method uri] :as req}]
     (let [resp (handler req)]
       (println (name request-method) (:status resp)
-            (if-let [qs (:query-string req)]
-              (str uri "?" qs) uri))
+               (if-let [qs (:query-string req)]
+                 (str uri "?" qs) uri))
       resp)))
 
 (def app
@@ -138,9 +139,29 @@
 ;; ----------------------------------------------------------------------------- 
 ;; Entry point
 ;; -----------------------------------------------------------------------------
+(defonce server (atom nil))
 
 (defn -main
   [& _args]
   (let [port (Integer/parseInt (or (System/getenv "PORT") "3000"))]
     (println (format "🚀 Servidor disponível em http://localhost:%s" port))
-    (run-server app {:port port})))
+    (reset! server (run-server app {:port port}))))
+
+;; ----------------------------------------------------------------------------- 
+;; Server interativo com REPL
+;; -----------------------------------------------------------------------------
+(defn stop-server []
+  (when @server
+    (@server :timeout 100)
+    (reset! server nil)))
+
+(defn reset-server []
+  (stop-server)
+  (-main))
+
+(comment
+  (reset-server)
+  (stop-server)
+  @server
+  (app {:request-method :get
+        :uri "/api"}))
