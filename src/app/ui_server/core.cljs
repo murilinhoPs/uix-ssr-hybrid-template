@@ -1,4 +1,4 @@
-(ns app.ui-server.client
+(ns app.ui-server.core
   "Cliente UIx responsável pela hidratação dos componentes renderizados no servidor."
   (:require [uix.core :as uix :refer [$ defui]]
             [uix.dom]))

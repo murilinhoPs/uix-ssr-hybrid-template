@@ -1,4 +1,4 @@
-(ns app.server.init
+(ns app.server.core
   "Servidor Ring/Jetty com SSR básico pronto para hidratação UIx."
   (:require [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.params :refer [wrap-params]]
