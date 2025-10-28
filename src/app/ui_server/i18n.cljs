@@ -12,16 +12,16 @@
                                              :pause "Pause"
                                              :select-action "Select what you want to do:"}}
           :missing        "Missing translation"}
-   :pt {:header         {:title "Título"
-                         :subtitle "Novo subtítulo"
-                         :close "Fechar"}
-        :modal          {:cancel "Cancelar"
-                         :ok "Confirmar"
-                         :heading "Atenção"
-                         :example-options {:play "Jogar"
-                                           :pause "Pause"
-                                           :select-action "Escolha o que deseja fazer:"}}
-        :missing        "Texto não existe"}})
+   :pt   {:header         {:title "Título"
+                           :subtitle "Novo subtítulo"
+                           :close "Fechar"}
+          :modal          {:cancel "Cancelar"
+                           :ok "Confirmar"
+                           :heading "Atenção"
+                           :example-options {:play "Jogar"
+                                             :pause "Pause"
+                                             :select-action "Escolha o que deseja fazer:"}}
+          :missing        "Texto não existe"}})
 
 (def check-lang
   (let [js-language (.-language js/navigator)]
