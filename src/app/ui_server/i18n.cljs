@@ -1,5 +1,6 @@
 (ns app.ui-server.i18n
-  (:require [taoensso.tempura :as tempura :refer [tr]]))
+  (:require
+   [taoensso.tempura :as tempura :refer [tr]]))
 
 (def i18n-dictionary
   {:en   {:header         {:shuffle-deck "Title"
