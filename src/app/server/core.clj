@@ -130,6 +130,8 @@
                  (str uri "?" qs) uri))
       resp)))
 
+(defonce server (atom nil)) ;; Torna o server interativo com o REPL
+
 (def app
   (-> app-routes
       wrap-params
@@ -139,7 +141,6 @@
 ;; ----------------------------------------------------------------------------- 
 ;; Entry point
 ;; -----------------------------------------------------------------------------
-(defonce server (atom nil))
 
 (defn -main
   [& _args]
