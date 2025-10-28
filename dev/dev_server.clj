@@ -19,7 +19,7 @@
   (let [watch-process (run-command "shadow-cljs watch" "npx shadow-cljs watch app")
         _ (Thread/sleep 3000)
         ;; Inicia o servidor
-        server-process (run-command "clj server" "clj -M -m app.server.init")]
+        server-process (run-command "clj server" "clj -M -m app.server.core")]
     ;; Aguarda ambos os processos
     @watch-process
     @server-process))
